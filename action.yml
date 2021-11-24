@@ -123,7 +123,6 @@ runs:
       #continue-on-error: true
       run: |
         cd $GITHUB_WORKSPACE/board-stats
-        cat "$stats_json"
         chmod ug+x $GITHUB_WORKSPACE/gh-workflow/bash/board/accum-stats.sh
         $GITHUB_WORKSPACE/gh-workflow/bash/board/accum-stats.sh
         # caution: no operation after that line if non zero exit code happens above
