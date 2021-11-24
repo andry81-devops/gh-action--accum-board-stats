@@ -1,0 +1,167 @@
+# CAUTION:
+#   Not all features of a generic GitHub action is supported: https://github.com/actions/runner/issues/646
+#
+# **What does Composite Run Steps Not Support**
+#
+# We don't support setting conditionals, continue-on-error, timeout-minutes, "uses", and secrets on individual steps within a composite action right now.
+#
+# (Note: we do support these attributes being set in workflows for a step that uses a composite run steps action)
+#
+
+name: accum-board-stats
+description: 'forum board statistic request and accumulation'
+
+inputs:
+  board_name:
+    description: 'Board name'
+    required: true
+    # examples:
+    # - totalcmd
+    # - doublecmd
+
+  topic_query_url:
+    description: 'URL to query topic or post to request it's replies and views'
+    required: true
+    # example:
+    #   https://myboard.com/board/search.php?keywords="{{SearchPhrase}}"&terms=all&author={{TopicAuthor}}&fid%5B%5D={{ForumId}}&sc=0&sf=titleonly&sr=topics&sk=i&sd=d&st=0&ch=1&t=0&submit=Search
+
+  replies_sed_regexp:
+    description: 'Sed regexp to match the replies value'
+    required: true
+    # example:
+    #   `s/.*class="posts"[^0-9]*([0-9.]+).*/\1/p`
+
+  views_sed_regexp:
+    description: 'Sed regexp to match the views value'
+    required: true
+    # example:
+    #   `s/.*class="views"[^0-9]*([0-9.]+).*/\1/p`
+
+  deps_repo_owner:
+    description: 'Owner of a repository used to checkout dependencies'
+    required: true
+
+  stat_entity_path:
+    description: 'Statistic entity path to request'
+    required: true
+    # examples:
+    # - traffic/board/totalcmd
+    # - traffic/board/doublecmd
+
+  output_repo_owner:
+    description: 'Owner of a repository used to output the statistic'
+    required: true
+
+  output_repo:
+    description: 'Repository name used to output the statistic'
+    required: true
+
+  output_repo_branch:
+    description: 'Repository branch used to output the statistic'
+    default: master
+
+  output_repo_dir:
+    description: 'Output repository relative directory path to store requested and accumulated statistic'
+    required: true
+    # examples:
+    # - traffic/board/totalcmd
+    # - traffic/board/doublecmd
+
+  output_repo_write_token:
+    description: 'PAT token to the output repository with write/push access rights'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    # step is required to workaround variable expansion in variables
+    - name: declare dependent variables
+      shell: bash
+      run: |
+        echo "stats_dir=${{ inputs.output_repo_dir }}" >> $GITHUB_ENV
+        echo "stats_json=${{ inputs.output_repo_dir }}/latest.json" >> $GITHUB_ENV
+        echo "board_name=${{ inputs.board_name }}" >> $GITHUB_ENV
+        echo "topic_query_url='${{ inputs.topic_query_url }}'" >> $GITHUB_ENV
+        echo "replies_sed_regexp='${{ inputs.replies_sed_regexp }}'" >> $GITHUB_ENV
+        echo "views_sed_regexp='${{ inputs.views_sed_regexp }}'" >> $GITHUB_ENV
+
+    - name: allocate directories
+      shell: bash
+      run: |
+        mkdir $GITHUB_WORKSPACE/gh-workflow $GITHUB_WORKSPACE/board-stats
+        echo "WORKFLOW_TEMPDIR=$(mktemp -d)" >> $GITHUB_ENV
+
+    - name: allocate variables
+      shell: bash
+      run: |
+        echo "write_error_to_file=$WORKFLOW_TEMPDIR/err.log" >> $GITHUB_ENV
+        echo "write_warning_to_file=$WORKFLOW_TEMPDIR/warn.log" >> $GITHUB_ENV
+
+    - name: checkout gh-workflow
+      uses: actions/checkout@v2
+      with:
+        repository: ${{ inputs.deps_repo_owner }}/gh-workflow
+        path:       gh-workflow
+
+    - name: checkout board-stats
+      uses: actions/checkout@v2
+      with:
+        repository: ${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}
+        ref:        ${{ inputs.output_repo_branch }}
+        path:       board-stats
+        token:      ${{ inputs.output_repo_write_token }}
+
+    # NOTE:
+    #   Several features below are commented out because is not supported in a composite action runnner:
+    #     * conditionals
+    #     * continue-on-error
+    #
+
+    - name: accumulate ${{ inputs.stat_entity_path }}
+      id: accum-stats
+      shell: bash
+      #continue-on-error: true
+      run: |
+        cd $GITHUB_WORKSPACE/board-stats
+        cat "$stats_json"
+        chmod ug+x $GITHUB_WORKSPACE/gh-workflow/bash/board/accum-stats.sh
+        $GITHUB_WORKSPACE/gh-workflow/bash/board/accum-stats.sh
+        # caution: no operation after that line if non zero exit code happens above
+
+    #- name: allocate error and warning variables
+    #  if: steps.accum-stats.outcome != 'success'
+    #  shell: bash
+    #  run: |
+    #    # allocate variables here to make it visible in the next step
+    #    [[ -f "$write_error_to_file" ]] && echo "error_string<<EOF" >> $GITHUB_ENV
+    #    [[ -f "$write_error_to_file" ]] && cat "$write_error_to_file" >> $GITHUB_ENV
+    #    [[ -f "$write_error_to_file" ]] && echo "EOF" >> $GITHUB_ENV
+    #    [[ -f "$write_warning_to_file" ]] && echo "warning_string<<EOF" >> $GITHUB_ENV
+    #    [[ -f "$write_warning_to_file" ]] && cat "$write_warning_to_file" >> $GITHUB_ENV
+    #    [[ -f "$write_warning_to_file" ]] && echo "EOF" >> $GITHUB_ENV
+    #    exit 0
+
+    #- name: print errors and warnings
+    #  if: steps.accum-stats.outcome != 'success'
+    #  shell: bash
+    #  run: |
+    #    [[ -n "$error_string" ]] && echo "::error ::$error_string"
+    #    [[ -n "$warning_string" ]] && echo "::warning ::$warning_string"
+    #    exit 255
+
+    - name: commit board-stats
+      shell: bash
+      run: |
+        cd $GITHUB_WORKSPACE/board-stats
+        git add .
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        git commit -m "Automated update: ${{ inputs.stat_entity_path }}"
+
+    - name: push board-stats
+      uses: ad-m/github-push-action@master
+      with:
+        repository:   ${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}
+        branch:       ${{ inputs.output_repo_branch }}
+        directory:    board-stats
+        github_token: ${{ inputs.output_repo_write_token }}
