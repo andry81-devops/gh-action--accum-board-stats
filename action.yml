@@ -37,6 +37,11 @@ inputs:
     # example:
     #   `s/.*class="views"[^0-9]*([0-9.]+).*/\1/p`
 
+  curl_flags:
+    description: 'additional curl flags'
+    # example:
+    #   `-H 'Cache-Control: no-cache'`
+
   deps_repo_owner:
     description: 'Owner of a repository used to checkout dependencies'
     required: true
@@ -84,6 +89,7 @@ runs:
         echo "topic_query_url=${{ inputs.topic_query_url }}" >> $GITHUB_ENV
         echo "replies_sed_regexp=${{ inputs.replies_sed_regexp }}" >> $GITHUB_ENV
         echo "views_sed_regexp=${{ inputs.views_sed_regexp }}" >> $GITHUB_ENV
+        echo "curl_flags=${{ inputs.curl_flags }}" >> $GITHUB_ENV
 
     - name: allocate directories
       shell: bash
