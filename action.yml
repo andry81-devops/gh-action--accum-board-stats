@@ -81,9 +81,9 @@ runs:
         echo "stats_dir=${{ inputs.output_repo_dir }}" >> $GITHUB_ENV
         echo "stats_json=${{ inputs.output_repo_dir }}/latest.json" >> $GITHUB_ENV
         echo "board_name=${{ inputs.board_name }}" >> $GITHUB_ENV
-        echo "topic_query_url='${{ inputs.topic_query_url }}'" >> $GITHUB_ENV
-        echo "replies_sed_regexp='${{ inputs.replies_sed_regexp }}'" >> $GITHUB_ENV
-        echo "views_sed_regexp='${{ inputs.views_sed_regexp }}'" >> $GITHUB_ENV
+        echo "topic_query_url=${{ inputs.topic_query_url }}" >> $GITHUB_ENV
+        echo "replies_sed_regexp=${{ inputs.replies_sed_regexp }}" >> $GITHUB_ENV
+        echo "views_sed_regexp=${{ inputs.views_sed_regexp }}" >> $GITHUB_ENV
 
     - name: allocate directories
       shell: bash
