@@ -20,7 +20,7 @@ inputs:
     # - doublecmd
 
   topic_query_url:
-    description: 'URL to query topic or post to request it's replies and views'
+    description: 'URL to query topic or post to request its replies and views'
     required: true
     # example:
     #   https://myboard.com/board/search.php?keywords="{{SearchPhrase}}"&terms=all&author={{TopicAuthor}}&fid%5B%5D={{ForumId}}&sc=0&sf=titleonly&sr=topics&sk=i&sd=d&st=0&ch=1&t=0&submit=Search
