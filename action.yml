@@ -126,6 +126,16 @@ runs:
         $GITHUB_WORKSPACE/gh-workflow/bash/board/accum-stats.sh
         # caution: no operation after that line if non zero exit code happens above
 
+    - name: generate commit message suffix
+      shell: bash
+      run: |
+        echo "COMMIT_MESSAGE_SUFFIX=" >> $GITHUB_ENV
+        if [[ -n "$STATS_REPLIES_DIFF$STATS_VIEWS_DIFF" ]]; then
+          (( STATS_REPLIES_DIFF >= 0 )) && STATS_REPLIES_DIFF=+${STATS_REPLIES_DIFF:-0}
+          (( STATS_VIEWS_DIFF >= 0 )) && STATS_VIEWS_DIFF=+${STATS_VIEWS_DIFF:-0}
+          echo "COMMIT_MESSAGE_SUFFIX= | re vi: $STATS_REPLIES_DIFF $STATS_VIEWS_DIFF" >> $GITHUB_ENV
+        fi
+
     - name: commit board-stats
       shell: bash
       run: |
@@ -133,7 +143,7 @@ runs:
         git add .
         git config --global user.name "GitHub Action"
         git config --global user.email "action@github.com"
-        git commit -m "Automated update: ${{ inputs.stat_entity_path }}"
+        git commit -m "Automated update: ${{ inputs.stat_entity_path }}$COMMIT_MESSAGE_SUFFIX"
 
     - name: push board-stats
       uses: ad-m/github-push-action@master

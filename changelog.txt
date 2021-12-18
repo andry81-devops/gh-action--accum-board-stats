@@ -1,3 +1,6 @@
+2021.12.18:
+* changed: action.yml: commit message suffix with changes in statistic
+
 2021.12.05:
 * new: `changelog.txt` changelog file
 * new: `userlog.txt` userlog file
