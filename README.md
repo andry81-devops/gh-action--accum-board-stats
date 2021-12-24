@@ -1,4 +1,36 @@
 <p align="center">
+  <a href="#"><img src="https://img.shields.io/github/repo-size/andry81/gh-action--accum-board-stats" valign="middle" alt="GitHub repo size in bytes" /></a>
+• <a href="https://github.com/XAMPPRocky/tokei"><img src="https://tokei.rs/b1/github/andry81/gh-action--accum-board-stats?category=lines" valign="middle" alt="lines of text by tokei.rs" /></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/andry81/gh-action--accum-board-stats--gh-stats/commits/master/traffic/views">
+    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=Github%20views|all&query=count&url=https://github.com/andry81/gh-action--accum-board-stats--gh-stats/raw/master/traffic/views/latest-accum.json?raw=True&logo=github" valign="middle" alt="GitHub views|any|total" />
+    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=14d&query=count&url=https://github.com/andry81/gh-action--accum-board-stats--gh-stats/raw/master/traffic/views/latest.json?raw=True" valign="middle" alt="GitHub views|any|14d" /></a>
+• <a href="https://github.com/andry81/gh-action--accum-board-stats--gh-stats/commits/master/traffic/views">
+    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=Github%20views|unq&query=uniques&url=https://github.com/andry81/gh-action--accum-board-stats--gh-stats/raw/master/traffic/views/latest-accum.json?raw=True&logo=github" valign="middle" alt="GitHub views|unique per day|total" />
+    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=14d&query=uniques&url=https://github.com/andry81/gh-action--accum-board-stats--gh-stats/raw/master/traffic/views/latest.json?raw=True" valign="middle" alt="GitHub views|unique per day|14d" /></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/andry81/gh-action--accum-board-stats--gh-stats/commits/master/traffic/clones">
+    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=Github%20clones|all&query=count&url=https://github.com/andry81/gh-action--accum-board-stats--gh-stats/raw/master/traffic/clones/latest-accum.json?raw=True&logo=github" valign="middle" alt="GitHub clones|any|total" />
+    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=14d&query=count&url=https://github.com/andry81/gh-action--accum-board-stats--gh-stats/raw/master/traffic/clones/latest.json?raw=True" valign="middle" alt="GitHub clones|any|14d" /></a>
+• <a href="https://github.com/andry81/gh-action--accum-board-stats--gh-stats/commits/master/traffic/clones">
+    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=Github%20clones|unq&query=uniques&url=https://github.com/andry81/gh-action--accum-board-stats--gh-stats/raw/master/traffic/clones/latest-accum.json?raw=True&logo=github" valign="middle" alt="GitHub clones|unique per day|total" />
+    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=14d&query=uniques&url=https://github.com/andry81/gh-action--accum-board-stats--gh-stats/raw/master/traffic/clones/latest.json?raw=True" valign="middle" alt="GitHub clones|unique per day|14d" /></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/andry81/gh-action--accum-board-stats/commits">
+    <img src="https://img.shields.io/github/commits-since/andry81/gh-action--accum-board-stats/latest?sort=semver&label=Github%20commits%20since%20latest" valign="middle" alt="GitHub commits since latest version" /></a>
+  <a href="https://github.com/andry81/gh-action--accum-board-stats/releases">
+    <img src="https://img.shields.io/github/v/release/andry81/gh-action--accum-board-stats?include_prereleases&label=latest" valign="middle" alt="latest release name" /></a>
+</p>
+
+---
+
+<p align="center">
   <a href="https://github.com/andry81/gh-action--accum-board-stats/blob/master/userlog.md">Userlog</a>
 • <a href="https://github.com/andry81/gh-action--accum-board-stats/blob/master/changelog.txt">Changelog</a>
 • <a href="#dependecies">Dependencies</a>
@@ -97,4 +129,4 @@ The action has supported not all features of a generic GitHub action: https://gi
 
 ## Copyright and License<a name="copyright-and-license"></a>
 
-Code and documentation copyright 2021 Andrey Dibrov. Code released under [MIT License](https://github.com/andry81/gh-action--accum-gh-stats/blob/master/license.txt)
+Code and documentation copyright 2021 Andrey Dibrov. Code released under [MIT License](https://github.com/andry81/gh-action--accum-board-stats/blob/master/license.txt)
