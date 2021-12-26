@@ -67,7 +67,7 @@ Tutorial to use with: https://github.com/andry81/github-accum-stats</h4>
 
 ## Examples:
 
-`./github/workflows/accum-phpbb-board-stats.yml`:
+`.github/workflows/accum-phpbb-board-stats.yml`:
 
 ```yml
 # based on: https://github.com/andry81/github-accum-stats
