@@ -9,7 +9,7 @@
 #
 
 name: accum-board-stats
-description: 'forum board statistic request and accumulation'
+description: 'GitHub composite action to request and accumulate a forum board post replies and views statistic'
 
 inputs:
   board_name:
