@@ -126,19 +126,22 @@ runs:
         $GITHUB_WORKSPACE/gh-workflow/bash/board/accum-stats.sh
         # caution: no operation after that line if non zero exit code happens above
 
-    - name: generate commit message suffix
+    - name: generate messages
       shell: bash
       run: |
+        echo "MINIDIFF_PRINT_MESSAGE=" >> $GITHUB_ENV
         echo "COMMIT_MESSAGE_SUFFIX=" >> $GITHUB_ENV
         if [[ -n "$STATS_REPLIES_DIFF$STATS_VIEWS_DIFF" ]]; then
           (( STATS_REPLIES_DIFF >= 0 )) && STATS_REPLIES_DIFF=+${STATS_REPLIES_DIFF:-0}
           (( STATS_VIEWS_DIFF >= 0 )) && STATS_VIEWS_DIFF=+${STATS_VIEWS_DIFF:-0}
+          echo "MINIDIFF_PRINT_MESSAGE=re vi: $STATS_REPLIES_DIFF $STATS_VIEWS_DIFF" >> $GITHUB_ENV
           echo "COMMIT_MESSAGE_SUFFIX= | re vi: $STATS_REPLIES_DIFF $STATS_VIEWS_DIFF" >> $GITHUB_ENV
         fi
 
     - name: commit board-stats
       shell: bash
       run: |
+        echo "::notice ::diff: $MINIDIFF_PRINT_MESSAGE"
         cd $GITHUB_WORKSPACE/board-stats
         git add .
         git config --global user.name "GitHub Action"
