@@ -79,17 +79,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: head annotations
-      shell: bash
-      run: |
-        echo "::notice ::output repo dir: https://github.com/${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}/tree/${{ inputs.output_repo_branch }}/${{ inputs.output_repo_dir }}"
-
     # step is required to workaround variable expansion in variables
     - name: declare dependent variables
       shell: bash
       run: |
-        echo "stats_dir=${{ inputs.output_repo_dir }}" >> $GITHUB_ENV
-        echo "stats_json=${{ inputs.output_repo_dir }}/latest.json" >> $GITHUB_ENV
+        echo "GH_WORKFLOW_ROOT=$GITHUB_WORKSPACE/gh-workflow" >> $GITHUB_ENV
+        echo "stats_dir=$GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}" >> $GITHUB_ENV
+        echo "stats_json=$GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}/latest.json" >> $GITHUB_ENV
         echo "board_name=${{ inputs.board_name }}" >> $GITHUB_ENV
         echo "topic_query_url=${{ inputs.topic_query_url }}" >> $GITHUB_ENV
         echo "replies_sed_regexp=${{ inputs.replies_sed_regexp }}" >> $GITHUB_ENV
@@ -99,7 +95,7 @@ runs:
     - name: allocate directories
       shell: bash
       run: |
-        mkdir $GITHUB_WORKSPACE/gh-workflow $GITHUB_WORKSPACE/board-stats
+        mkdir -p $GH_WORKFLOW_ROOT $GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}
         echo "WORKFLOW_TEMPDIR=$(mktemp -d)" >> $GITHUB_ENV
 
     - name: checkout gh-workflow
@@ -107,6 +103,13 @@ runs:
       with:
         repository: ${{ inputs.deps_repo_owner }}/gh-workflow
         path:       gh-workflow
+
+    - name: head annotations
+      shell: bash
+      run: |
+        chmod ug+x $GH_WORKFLOW_ROOT/bash/github/print-notice.sh
+        $GH_WORKFLOW_ROOT/bash/github/print-notice.sh \
+          "output repo dir: https://github.com/${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}/tree/${{ inputs.output_repo_branch }}/${{ inputs.output_repo_dir }}"
 
     - name: checkout board-stats
       uses: actions/checkout@v2
@@ -126,9 +129,8 @@ runs:
       id: accum-stats
       shell: bash
       run: |
-        cd $GITHUB_WORKSPACE/board-stats
-        chmod ug+x $GITHUB_WORKSPACE/gh-workflow/bash/board/accum-stats.sh
-        $GITHUB_WORKSPACE/gh-workflow/bash/board/accum-stats.sh
+        chmod ug+x $GH_WORKFLOW_ROOT/bash/board/accum-stats.sh
+        $GH_WORKFLOW_ROOT/bash/board/accum-stats.sh
         # caution: no operation after that line if non zero exit code happens above
 
     - name: commit board-stats
