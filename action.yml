@@ -46,6 +46,14 @@ inputs:
     description: 'Owner of a repository used to checkout dependencies'
     required: true
 
+  deps_repo_branch:
+    description: 'Repository branch used to checkout dependencies'
+    default: master
+
+  deps_repo_read_token:
+    description: 'PAT token to a repository used to checkout dependencies'
+    default: ${{ github.token }}
+
   stat_entity_path:
     description: 'Statistic entity path to request'
     required: true
@@ -76,6 +84,12 @@ inputs:
     description: 'PAT token to the output repository with write/push access rights'
     required: true
 
+# NOTE:
+#   Several features below is not supported in a composite action runnner:
+#     * conditionals
+#     * continue-on-error
+#
+
 runs:
   using: "composite"
   steps:
@@ -98,11 +112,13 @@ runs:
         mkdir -p $GH_WORKFLOW_ROOT $GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}
         echo "WORKFLOW_TEMPDIR=$(mktemp -d)" >> $GITHUB_ENV
 
-    - name: checkout gh-workflow
+    - name: checkout gh-workflow@${{ inputs.deps_repo_branch }}
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.deps_repo_owner }}/gh-workflow
+        ref:        ${{ inputs.deps_repo_branch }}
         path:       gh-workflow
+        token:      ${{ inputs.deps_repo_read_token }}
 
     - name: head annotations
       shell: bash
@@ -111,19 +127,13 @@ runs:
         $GH_WORKFLOW_ROOT/bash/github/print-notice.sh \
           "output repo dir: https://github.com/${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}/tree/${{ inputs.output_repo_branch }}/${{ inputs.output_repo_dir }}"
 
-    - name: checkout board-stats
+    - name: checkout board-stats@${{ inputs.output_repo_branch }}
       uses: actions/checkout@v2
       with:
         repository: ${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}
         ref:        ${{ inputs.output_repo_branch }}
         path:       board-stats
         token:      ${{ inputs.output_repo_write_token }}
-
-    # NOTE:
-    #   Several features below is not supported in a composite action runnner:
-    #     * conditionals
-    #     * continue-on-error
-    #
 
     - name: accumulate ${{ inputs.stat_entity_path }}
       id: accum-stats
