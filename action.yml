@@ -127,19 +127,21 @@ runs:
     - name: declare variables from lists
       shell: bash
       run: |
-        $GH_WORKFLOW_ROOT/bash/github/set-env-from-args.sh ${{ inputs.env }}
+        $GH_WORKFLOW_ROOT/bash/github/set-env-from-args.sh \
+          ${{ inputs.env }}
 
     - name: declare local variables
       shell: bash
       run: |
-        echo "changelog_dir=$GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}" >> $GITHUB_ENV
-        echo "stats_dir=$GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}" >> $GITHUB_ENV
-        echo "stats_json=$GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}/latest.json" >> $GITHUB_ENV
-        echo "board_name=${{ inputs.board_name }}" >> $GITHUB_ENV
-        echo "topic_query_url=${{ inputs.topic_query_url }}" >> $GITHUB_ENV
-        echo "replies_sed_regexp=${{ inputs.replies_sed_regexp }}" >> $GITHUB_ENV
-        echo "views_sed_regexp=${{ inputs.views_sed_regexp }}" >> $GITHUB_ENV
-        echo "curl_flags=${{ inputs.curl_flags }}" >> $GITHUB_ENV
+        $GH_WORKFLOW_ROOT/bash/github/set-env-from-args.sh \
+          "changelog_dir=$GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}" \
+          "stats_dir=$GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}" \
+          "stats_json=$GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}/latest.json" \
+          "board_name=${{ inputs.board_name }}" \
+          "topic_query_url=${{ inputs.topic_query_url }}" \
+          "replies_sed_regexp=${{ inputs.replies_sed_regexp }}" \
+          "views_sed_regexp=${{ inputs.views_sed_regexp }}" \
+          "curl_flags=${{ inputs.curl_flags }}"
 
     - name: allocate directories
       shell: bash
