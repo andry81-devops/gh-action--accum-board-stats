@@ -86,7 +86,13 @@ inputs:
 
   env:
     description: environment variables
-    # see dependent repositories and scripts for details
+    # See dependent repositories and scripts for details.
+    # examples:
+    #   CONTINUE_ON_INVALID_INPUT=1
+    #   CONTINUE_ON_EMPTY_CHANGES=1
+    #   CONTINUE_ON_RESIDUAL_CHANGES=1
+    #   ENABLE_GENERATE_CHANGELOG_FILE=1
+    #   ENABLE_PRINT_CURL_RESPONSE_ON_ERROR=1
 
 # NOTE:
 #   Several features below is not supported in a composite action runnner:
