@@ -95,6 +95,7 @@ jobs:
           views_sed_regexp:         s/.*class=\"views\"[^0-9]*([0-9.]+).*/\1/p
 
           curl_flags: >-
+            -v
             -H 'Cache-Control: no-cache'
 
           deps_repo_owner:          {{REPO_OWNER}}
