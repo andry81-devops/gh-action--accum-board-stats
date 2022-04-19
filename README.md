@@ -44,7 +44,7 @@
 
 <h4 align="center">GitHub composite action to request and accumulate a forum board post replies and views statistic.<br/>
 <br/>
-Tutorial to use with: https://github.com/andry81-devops/github-accum-stats</h4>
+Tutorial to use with: https://github.com/andry81-devops/accum-content</h4>
 
 ##
 
@@ -79,12 +79,9 @@ Tutorial to use with: https://github.com/andry81-devops/github-accum-stats</h4>
 
 ## Examples:
 
-`.github/workflows/accum-phpbb-board-stats.yml`:
+<a name="accum-phpbb-board-stats-yml">`.github/workflows/accum-phpbb-board-stats.yml`</a>:
 
 ```yml
-# based on: https://github.com/andry81-devops/github-accum-stats
-#
-
 name: phpbb board stats updating every 4 hours
 
 on:
@@ -135,19 +132,19 @@ jobs:
 
 > :warning: You must use different values for `deps_repo_owner` and `output_repo_owner` if respective repositories actually under different repository owners.
 
-> :information_source: See <a href="https://github.com/andry81-devops/github-accum-stats/blob/master/README.md#reuse">REUSE</a> section for details if you have multiple repositories and want to store all workflow scripts in a single repository.
+> :information_source: See <a href="https://github.com/andry81-devops/github-accum-stats#reuse">REUSE</a> section for details if you have multiple repositories and want to store all GitHub workflow scripts (`.github/workflows/*.yml`) in a single repository.
 
 ## <a name="dependecies">Dependencies</a>
 
 * https://github.com/andry81-devops/gh-workflow
 
-## <a name="known_issues">Known Issues</a>
+## Known Issues
 
-https://github.com/andry81-devops/github-accum-stats/blob/master/README.md#known_issues
+https://github.com/andry81-devops/accum-content#known-issues
 
-## <a name="known_issues_updates">Last known updates on composite actions features</a>
+## Last known issues updates
 
-https://github.com/andry81-devops/github-accum-stats/blob/master/README.md#known_issues_updates
+https://github.com/andry81-devops/accum-content#last-known-issues-updates
 
 ## <a name="copyright-and-license">Copyright and License</a>
 
