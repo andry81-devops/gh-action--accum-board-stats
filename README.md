@@ -126,6 +126,7 @@ jobs:
           #  ENABLE_GENERATE_CHANGELOG_FILE=1
           #  ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1
           #  ENABLE_PRINT_CURL_RESPONSE_ON_ERROR=1
+          #  CHANGELOG_FILE=changelog.txt
 ```
 
 > :information_source: You can use `secrets.READ_STATS_TOKEN` instead of `secrets.WRITE_STATS_TOKEN` as long as both repositories under the same repository owner.
