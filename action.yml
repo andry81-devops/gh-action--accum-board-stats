@@ -142,12 +142,6 @@ runs:
         $GH_WORKFLOW_ROOT/bash/github/set-env-from-args.sh \
           "changelog_dir=${CHANGELOG_FILE%/*}"
 
-    - name: allocate directories
-      shell: bash
-      run: |
-        $GH_WORKFLOW_ROOT/bash/github/set-env-from-args.sh \
-          "WORKFLOW_TEMPDIR=$(mktemp -d)"
-
     - name: head annotations
       shell: bash
       run: |
