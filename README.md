@@ -105,7 +105,6 @@ jobs:
     steps:
       - uses: {{REPO_OWNER}}/gh-action--accum-board-stats@master
         with:
-          board_name:               phpbb
           # CAUTION: Beware of double quotes strip in case of usage yaml `>-` operator or even a single-quotted string!
           topic_query_url:          https://phpbb.com/board/search.php?keywords=\"{{TOPIC_KEYWORDS}}\"&terms=all&author={{TOPIC_AUTHOR}}&fid%5B%5D=6&sc=0&sf=titleonly&sr=topics&sk=i&sd=d&st=0&ch=1&t=0&submit=Search
           replies_sed_regexp:       s/.*class=\"posts\"[^0-9]*([0-9.]+).*/\1/p
@@ -119,7 +118,7 @@ jobs:
           deps_repo_branch:         master
           deps_repo_read_token:     ${{ github.token }}
 
-          stat_entity_path:         traffic/board/phpbb
+          commit_msg_entity:        my-board-1
 
           output_repo_owner:        {{REPO_OWNER}}
           output_repo:              {{REPO}}--phpbb-stats
