@@ -79,6 +79,10 @@ All tutorials: https://github.com/andry81/index#tutorials
 
 * Can insert the time string in format `HH:MMZ` additionally after the date in each commit message (by default inserts only a date for shorter commit messages; `ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1`)
 
+* Can insert the workflow run number after date/time prefix in each commit message (by default does not insert for shorter commit messages; `ENABLE_COMMIT_MESSAGE_WITH_WORKFLOW_RUN_NUMBER=1`)
+
+* Can print GitHub Actions Run URL (with workflow run number) into the changelog file to reference the log on the GitHub (`ENABLE_GITHUB_ACTIONS_RUN_URL_PRINT_TO_CHANGELOG=1`)
+
 * Can print curl response in case of an error (by default only the progress prints; `ENABLE_PRINT_CURL_RESPONSE_ON_ERROR=1`)
 
 # USAGE
@@ -131,14 +135,19 @@ jobs:
           output_repo_dir:          traffic/board/phpbb
           output_repo_write_token:  ${{ secrets.READ_STATS_TOKEN }}
 
+          #flags: >-
+          #  ENABLE_PRINT_INITIAL_ENV_INTO_STDOUT=1
+
           #env: >-
           #  CONTINUE_ON_INVALID_INPUT=1
           #  CONTINUE_ON_EMPTY_CHANGES=1
           #  CONTINUE_ON_RESIDUAL_CHANGES=1
           #  ENABLE_GENERATE_CHANGELOG_FILE=1
-          #  ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1
+          #  ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1            # insert the time string in format HH:MMZ additionally after the date in each commit message
+          #  ENABLE_COMMIT_MESSAGE_WITH_WORKFLOW_RUN_NUMBER=1  # insert the workflow run number after date/time prefix in each commit message
           #  ENABLE_PRINT_CURL_RESPONSE_ON_ERROR=1
           #  CHANGELOG_FILE=changelog.txt
+          #  ENABLE_GITHUB_ACTIONS_RUN_URL_PRINT_TO_CHANGELOG=1
 ```
 
 > **Note** You can use `secrets.READ_STATS_TOKEN` instead of `secrets.WRITE_STATS_TOKEN` as long as both repositories under the same repository owner.
