@@ -73,7 +73,7 @@ All tutorials: https://github.com/andry81/index#tutorials
 
 **Functionality of the script**:
 
-* Can skip warnings and errors (`CONTINUE_ON_INVALID_INPUT=1`, `CONTINUE_ON_EMPTY_CHANGES=1`, `CONTINUE_ON_RESIDUAL_CHANGES=1`)
+* Can treat invalid input or empty changes as not an error as by default (`CONTINUE_ON_INVALID_INPUT=1`, `CONTINUE_ON_EMPTY_CHANGES=1`)
 
 * Can generate textual changelog file with notes about changes per commit (including changes absence in case of skipped errors; `ENABLE_GENERATE_CHANGELOG_FILE=1`)
 
@@ -81,7 +81,9 @@ All tutorials: https://github.com/andry81/index#tutorials
 
 * Can insert the workflow run number after date/time prefix in each commit message (by default does not insert for shorter commit messages; `ENABLE_COMMIT_MESSAGE_WITH_WORKFLOW_RUN_NUMBER=1`)
 
-* Can print GitHub Actions Run URL (with workflow run number) into the changelog file to reference the log on the GitHub (`ENABLE_GITHUB_ACTIONS_RUN_URL_PRINT_TO_CHANGELOG=1`)
+* Can print GitHub Actions Run URL (with workflow run number) into the changelog file to reference the log on the GitHub from the changelog file (`ENABLE_GITHUB_ACTIONS_RUN_URL_PRINT_TO_CHANGELOG=1`)
+
+* Can print Commit Reference URL into the changelog file to reference a commit on the GitHub from the changelog file (`ENABLE_COMMIT_REFERENCE_URL_PRINT_TO_CHANGELOG=1`)
 
 * Can print curl response in case of an error (by default only the progress prints; `ENABLE_PRINT_CURL_RESPONSE_ON_ERROR=1`)
 
@@ -135,19 +137,22 @@ jobs:
           output_repo_dir:          traffic/board/phpbb
           output_repo_write_token:  ${{ secrets.READ_STATS_TOKEN }}
 
-          #flags: >-
-          #  ENABLE_PRINT_INITIAL_ENV_INTO_STDOUT=1
+          flags: >-
+            ENABLE_PRINT_INITIAL_ENV_INTO_STDOUT=1
 
-          #env: >-
+          env: >-
+            ENABLE_GENERATE_CHANGELOG_FILE=1
+            CHANGELOG_FILE=changelog.txt
+            ENABLE_PRINT_CURL_RESPONSE_ON_ERROR=1
+            ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1            # insert the time string in format HH:MMZ additionally after the date in each commit message
+            ENABLE_COMMIT_MESSAGE_WITH_WORKFLOW_RUN_NUMBER=1  # insert the workflow run number after date/time prefix in each commit message
+            ENABLE_GITHUB_ACTIONS_RUN_URL_PRINT_TO_CHANGELOG=1
+            ENABLE_COMMIT_REFERENCE_URL_PRINT_TO_CHANGELOG=1
+          #  ENABLE_YAML_DIFF_PRINT_AFTER_EDIT=1
+          #  ENABLE_YAML_DIFF_PRINT_BEFORE_PATCH=1
+          #  ERROR_ON_EMPTY_CHANGES_WITHOUT_ERRORS=1
           #  CONTINUE_ON_INVALID_INPUT=1
           #  CONTINUE_ON_EMPTY_CHANGES=1
-          #  CONTINUE_ON_RESIDUAL_CHANGES=1
-          #  ENABLE_GENERATE_CHANGELOG_FILE=1
-          #  ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1            # insert the time string in format HH:MMZ additionally after the date in each commit message
-          #  ENABLE_COMMIT_MESSAGE_WITH_WORKFLOW_RUN_NUMBER=1  # insert the workflow run number after date/time prefix in each commit message
-          #  ENABLE_PRINT_CURL_RESPONSE_ON_ERROR=1
-          #  CHANGELOG_FILE=changelog.txt
-          #  ENABLE_GITHUB_ACTIONS_RUN_URL_PRINT_TO_CHANGELOG=1
 ```
 
 > **Note** You can use `secrets.READ_STATS_TOKEN` instead of `secrets.WRITE_STATS_TOKEN` as long as both repositories under the same repository owner.
