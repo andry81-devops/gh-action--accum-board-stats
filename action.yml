@@ -111,9 +111,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: load `flags` parameter into `GH_WORKFLOW_FLAGS` environment variable
+    - name: '[accum-board-stats][01] load `flags` parameter into `GH_WORKFLOW_FLAGS` environment variable'
       shell: bash
       run: |
+        ### [accum-board-stats][01] load `flags` parameter into `GH_WORKFLOW_FLAGS` environment variable
         # suppress not zero exit code
         { IFS=$' \t' read -r -d '' GH_WORKFLOW_FLAGS || (( 1 )); } <<::EOF::
         ${{ inputs.flags }}
@@ -121,9 +122,10 @@ runs:
         GH_WORKFLOW_FLAGS="${GH_WORKFLOW_FLAGS//[$'\n\r']/}" # remove all line returns
         echo "GH_WORKFLOW_FLAGS=$GH_WORKFLOW_FLAGS" >> $GITHUB_ENV
 
-    - name: print initial environment variables
+    - name: '[accum-board-stats][02] print initial environment variables'
       shell: bash
       run: |
+        ### [accum-board-stats][02] print initial environment variables
         eval __flags__=($GH_WORKFLOW_FLAGS)
         for arg in "${__flags__[@]}"; do
           # suppress not zero exit code
@@ -140,12 +142,13 @@ runs:
         done
 
     # step is required to workaround variable expansion in variables
-    - name: declare dependent variables
+    - name: '[accum-board-stats][03] declare dependent variables'
       shell: bash
       run: |
+        ### [accum-board-stats][03] declare dependent variables
         echo "GH_WORKFLOW_ROOT=$GITHUB_WORKSPACE/gh-workflow" >> $GITHUB_ENV
 
-    - name: checkout gh-workflow@${{ inputs.deps_repo_branch }}
+    - name: '[accum-board-stats][04] checkout gh-workflow@${{ inputs.deps_repo_branch }}'
       uses: andry81-devops/gh-action--git-checkout@master
       with:
         repository: ${{ inputs.deps_repo_owner }}/gh-workflow
@@ -156,16 +159,18 @@ runs:
         mkdir-p: >-
           ${{ env.GH_WORKFLOW_ROOT }}
 
-    - name: update permissions
+    - name: '[accum-board-stats][05] update permissions'
       shell: bash
       run: |
+        ### [accum-board-stats][05] update permissions
         chmod ug+x $GH_WORKFLOW_ROOT/bash/_common/update-permissions.sh
         $GH_WORKFLOW_ROOT/bash/_common/update-permissions.sh ug+x "$GH_WORKFLOW_ROOT/bash" -iname '*.sh'
 
     # step is required to pass environment variables externally
-    - name: declare variables from lists
+    - name: '[accum-board-stats][06] declare variables from lists'
       shell: bash
       run: |
+        ### [accum-board-stats][06] declare variables from lists
         # suppress not zero exit code
         { IFS=$' \t' read -r -d '' INPUT_ENV || (( 1 )); } <<::EOF::
         ${{ inputs.env }}
@@ -176,15 +181,17 @@ runs:
           "GHWF_GITHUB_ACTIONS_RUN_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
           "GHWF_REPO_STATS_COMMITS_URL=https://github.com/${{ github.repository }}/commits?branch=${{ inputs.output_repo_branch }}"
 
-    - name: variables validation
+    - name: '[accum-board-stats][07] variables validation'
       shell: bash
       run: |
+        ### [accum-board-stats][07] variables validation
         $GH_WORKFLOW_ROOT/bash/github/set-env-from-args.sh \
           "CHANGELOG_FILE=${CHANGELOG_FILE:-"changelog.txt"}"
 
-    - name: declare local variables
+    - name: '[accum-board-stats][08] declare local variables'
       shell: bash
       run: |
+        ### [accum-board-stats][08] declare local variables
         $GH_WORKFLOW_ROOT/bash/github/set-env-from-args.sh \
           "changelog_file=$CHANGELOG_FILE" \
           "CHANGELOG_FILE=$GITHUB_WORKSPACE/board-stats/${{ inputs.output_repo_dir }}/$CHANGELOG_FILE" \
@@ -195,15 +202,17 @@ runs:
           "views_sed_regexp=${{ inputs.views_sed_regexp }}" \
           "curl_flags=${{ inputs.curl_flags }}"
 
-    - name: declare local variables
+    - name: '[accum-board-stats][09] declare local variables'
       shell: bash
       run: |
+        ### [accum-board-stats][09] declare local variables
         $GH_WORKFLOW_ROOT/bash/github/set-env-from-args.sh \
           "changelog_dir=${CHANGELOG_FILE%/*}"
 
-    - name: head annotations
+    - name: '[accum-board-stats][10] head annotations'
       shell: bash
       run: |
+        ### [accum-board-stats][10] head annotations
         $GH_WORKFLOW_ROOT/bash/github/print-notice.sh \
           "topic query url: ${{ inputs.topic_query_url }}" \
           "output repo dir: https://github.com/${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}/tree/${{ inputs.output_repo_branch }}/${{ inputs.output_repo_dir }}"
@@ -211,7 +220,7 @@ runs:
           "changelog file: https://github.com/${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}/tree/${{ inputs.output_repo_branch }}/${{ inputs.output_repo_dir }}/$changelog_file" \
           "env:"$'\n'"  GITHUB_RUN_ID=\`$GITHUB_RUN_ID\`"$'\n'"  GITHUB_RUN_NUMBER=\`$GITHUB_RUN_NUMBER\`"
 
-    - name: checkout board-stats@${{ inputs.output_repo_branch }}
+    - name: '[accum-board-stats][11] checkout board-stats@${{ inputs.output_repo_branch }}'
       uses: andry81-devops/gh-action--git-checkout@master
       with:
         repository: ${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}
@@ -223,16 +232,18 @@ runs:
           ${{ inputs.output_repo_dir }}
           ${{ env.changelog_dir }}
 
-    - name: accumulate board-stats
+    - name: '[accum-board-stats][12] accumulate board-stats'
       id: accum-stats
       shell: bash
       run: |
+        ### [accum-board-stats][12] accumulate board-stats
         $GH_WORKFLOW_ROOT/bash/board/accum-stats.sh
         # caution: no operation after that line if non zero exit code happens above
 
-    - name: commit board-stats
+    - name: '[accum-board-stats][13] commit board-stats'
       shell: bash
       run: |
+        ### [accum-board-stats][13] commit board-stats
         cd $GITHUB_WORKSPACE/board-stats
         git add .
         git config --global user.name "GitHub Action"
@@ -247,7 +258,7 @@ runs:
         $GH_WORKFLOW_ROOT/bash/github/set-env-from-args.sh \
           "HEAD_COMMIT_HASH=$(git rev-parse HEAD)"
 
-    - name: push board-stats
+    - name: '[accum-board-stats][14] push board-stats'
       uses: ad-m/github-push-action@master
       with:
         repository:   ${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}
@@ -255,14 +266,16 @@ runs:
         directory:    board-stats
         github_token: ${{ inputs.output_repo_write_token }}
 
-    - name: print commit parameters into pipeline log only
+    - name: '[accum-board-stats][15] print commit parameters into pipeline log only'
       shell: bash
       run: |
+        ### [accum-board-stats][15] print commit parameters into pipeline log only
         $GH_WORKFLOW_ROOT/bash/github/print-notice.sh \
           "commit reference url: https://github.com/${{ inputs.output_repo_owner }}/${{ inputs.output_repo }}/commit/$HEAD_COMMIT_HASH"
 
-    - name: flush print annotations
+    - name: '[accum-board-stats][16] flush print annotations'
       if: always()
       shell: bash
       run: |
+        ### [accum-board-stats][16] flush print annotations
         $GH_WORKFLOW_ROOT/bash/github/flush-print-annotations.sh
