@@ -60,7 +60,7 @@ All tutorials: https://github.com/andry81/index#tutorials
 
 # gh-action--accum-board-stats@master
 
-**Features**:
+## Features:
 
 * Repository to track and repository to store traffic statistic can be different, and you may directly point the statistic as commits list:
   `https://github.com/{{REPO_OWNER}}/{{REPO}}--gh-stats/commits/master/traffic/board/phpbb`
@@ -70,25 +70,31 @@ All tutorials: https://github.com/andry81/index#tutorials
 * The script accumulates statistic both into a single file and into a set of files grouped by year and allocated per day:
   `traffic/board/phpbb/by_year/YYYY/YYYY-MM-DD.json`
 
+## Functionality of the script:
 
-**Functionality of the script**:
+* `CONTINUE_ON_INVALID_INPUT=1`, `CONTINUE_ON_EMPTY_CHANGES=1`:
+  Treats invalid input or empty changes as not an error as by default.
 
-* Can treat invalid input or empty changes as not an error as by default (`CONTINUE_ON_INVALID_INPUT=1`, `CONTINUE_ON_EMPTY_CHANGES=1`)
+* `ENABLE_GENERATE_CHANGELOG_FILE=1`, `CHANGELOG_FILE=".../changelog.txt"`:
+  Generates a textual changelog file with notes about changes per commit including the changes absence in case of skipped errors.
 
-* Can generate textual changelog file with notes about changes per commit (including changes absence in case of skipped errors; `ENABLE_GENERATE_CHANGELOG_FILE=1`)
+* `ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1`:
+  Inserts the time string in format `HH:MMZ` additionally after the date in each commit message (by default inserts only a date for shorter commit messages).
 
-* Can insert the time string in format `HH:MMZ` additionally after the date in each commit message (by default inserts only a date for shorter commit messages; `ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1`)
+* `ENABLE_COMMIT_MESSAGE_WITH_WORKFLOW_RUN_NUMBER=1`:
+  Inserts the workflow run number after date/time prefix in each commit message (by default does not insert for shorter commit messages).
 
-* Can insert the workflow run number after date/time prefix in each commit message (by default does not insert for shorter commit messages; `ENABLE_COMMIT_MESSAGE_WITH_WORKFLOW_RUN_NUMBER=1`)
+* `ENABLE_GITHUB_ACTIONS_RUN_URL_PRINT_TO_CHANGELOG=1`:
+  Prints GitHub Actions Run URL (with or without workflow run number) into the changelog file to reference the log on the GitHub from the changelog file.
 
-* Can print GitHub Actions Run URL (with workflow run number) into the changelog file to reference the log on the GitHub from the changelog file (`ENABLE_GITHUB_ACTIONS_RUN_URL_PRINT_TO_CHANGELOG=1`)
-
-* Can print Statistic Output Repository commit URL into the changelog file to reference the commit from being committed changelog file (`ENABLE_REPO_STATS_COMMITS_URL_PRINT_TO_CHANGELOG=1`)
+* `ENABLE_REPO_STATS_COMMITS_URL_PRINT_TO_CHANGELOG=1`:
+  Prints Statistic Output Repository commit URL into the changelog file to reference the commit from being committed changelog file.
 
   > **Note** The actual hash of the commit can not be know on the moment of the commit. So instead of the commit hash, an approximate date of the commit is used (~ +5 min ahead) in format of:
-  > `https://github.com/{{REPO_OWNER}}/{{REPO}}--gh-stats/commits?branch={{BRANCH}}&until=YYYY-MM-DD`
+  > `https://github.com/{{REPO_OWNER}}/{{REPO}}--gh-stats/commits?branch={{BRANCH}}&time_zone=utc&until=YYYY-MM-DD`
 
-* Can print curl response in case of an error (by default only the progress prints; `ENABLE_PRINT_CURL_RESPONSE_ON_ERROR=1`)
+* `ENABLE_PRINT_CURL_RESPONSE_ON_ERROR=1`:
+  Prints curl response in case of an error (by default only the progress prints)
 
 # USAGE
 
@@ -96,6 +102,7 @@ All tutorials: https://github.com/andry81/index#tutorials
 
 * `{{REPO_OWNER}}` -> repository owner
 * `{{REPO}}` -> your repository
+* `{{BRANCH}}` -> your repository branch or reference
 * `{{TOPIC_KEYWORDS}}` -> topic keywords
 * `{{TOPIC_AUTHOR}}` -> topic author
 
@@ -164,7 +171,7 @@ jobs:
 
 > **Note** See <a href="https://github.com/andry81-devops/github-accum-stats#reuse">REUSE</a> section for details if you have multiple repositories and want to store all GitHub workflow scripts (`.github/workflows/*.yml`) in a single repository.
 
-## <a name="dependecies">Dependencies</a>
+## Dependencies
 
 * https://github.com/andry81-devops/gh-workflow
 
@@ -176,6 +183,6 @@ https://github.com/andry81-devops/accum-content#known-issues
 
 https://github.com/andry81-devops/accum-content#last-known-issues-updates
 
-## <a name="copyright-and-license">Copyright and License</a>
+## Copyright and License
 
 Code and documentation copyright 2021 Andrey Dibrov. Code released under [MIT License](https://github.com/andry81-devops/gh-action--accum-board-stats/tree/HEAD/license.txt)
