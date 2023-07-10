@@ -4,6 +4,10 @@
 name: accum-board-stats
 description: 'GitHub composite action to request and accumulate a forum board post replies and views statistic'
 
+branding:
+  icon:  download
+  color: yellow
+
 inputs:
   topic_query_url:
     description: 'URL to query topic or post to request its replies and views'
